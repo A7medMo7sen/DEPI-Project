@@ -13,11 +13,11 @@ class SummaryPage extends StatelessWidget {
         leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
         title: Row(
           children: [
-            Image.asset('assets/images/logo.jpg', scale: 3),
+            Image.asset('assets/images/logo.jpg', width: 32,height: 32,),
             const SizedBox(width: 10),
             const Text(
               'Quiz Summary',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight(700)),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight(600)),
             ),
           ],
         ),
@@ -34,7 +34,6 @@ class SummaryPage extends StatelessWidget {
           ),
         ],
       ),
-
     );
   }
 }
