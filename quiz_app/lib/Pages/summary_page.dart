@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/Pages/home_page.dart';
 import 'package:quiz_app/Pages/quiz_page.dart';
 import 'package:quiz_app/Pages/review_page.dart';
 
 class SummaryPage extends StatefulWidget {
-  const SummaryPage({super.key, required this.grade,required this.userAnswer});
+  const SummaryPage({super.key, required this.grade, required this.userAnswer});
   final int grade;
   final List<String> userAnswer;
 
@@ -210,7 +211,8 @@ class _SummaryPageState extends State<SummaryPage>
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ReviewPage(userAnswer:widget.userAnswer),
+                              builder: (context) =>
+                                  ReviewPage(userAnswer: widget.userAnswer),
                             ),
                           );
                         },
@@ -303,7 +305,12 @@ class _SummaryPageState extends State<SummaryPage>
 
               const SizedBox(height: 10),
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                  );
+                },
                 label: const Text(
                   'Back to Home',
                   style: TextStyle(color: Color.fromRGBO(0, 0, 0, 1)),
