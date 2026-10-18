@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/resources/questions.dart';
 
-class ReviewPage extends StatelessWidget {
-  const ReviewPage({super.key});
+class ReviewPage extends StatefulWidget {
+  const ReviewPage({super.key, required this.userAnswer});
+  final List<String> userAnswer;
 
+  @override
+  State<ReviewPage> createState() => _ReviewPageState();
+}
+
+class _ReviewPageState extends State<ReviewPage> {
+  var currentQuestion = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +49,7 @@ class ReviewPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
                   Icon(Icons.bolt, color: Color(0xFF6254E8), size: 20),
                   SizedBox(width: 6),
@@ -52,7 +60,7 @@ class ReviewPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'QUESTION 1 OF 5',
+                    'QUESTION ${currentQuestion + 1} OF 5',
                     style: TextStyle(
                       color: Color(0xFF6254E8),
                       fontSize: 10,
@@ -66,8 +74,8 @@ class ReviewPage extends StatelessWidget {
 
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: const LinearProgressIndicator(
-                  value: 0.2,
+                child: LinearProgressIndicator(
+                  value: (currentQuestion + 1) / 5,
                   minHeight: 5,
                   backgroundColor: Color(0xFFE5DFFB),
                   color: Color(0xFF6254E8),
@@ -113,9 +121,8 @@ class ReviewPage extends StatelessWidget {
 
                     const SizedBox(height: 14),
 
-                    const Text(
-                      'Which widget displays a string\n'
-                      'of text in a Flutter interface?',
+                    Text(
+                      questions[currentQuestion].questiontext,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -124,162 +131,93 @@ class ReviewPage extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    Container(
+                    Image.asset(
+                      questions[currentQuestion].image,
                       width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF2D2B42),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'lib/main.dart',
-                                style: TextStyle(
-                                  color: Colors.white54,
-                                  fontSize: 10,
-                                ),
-                              ),
-                              Text(
-                                'StatelessWidget',
-                                style: TextStyle(
-                                  color: Colors.tealAccent,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "const ???('Welcome to Flutter!');",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                              fontFamily: 'monospace',
-                            ),
-                          ),
-                        ],
-                      ),
+                      height: 160,
                     ),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 18),
-
-              answerBox(
-                letter: 'A',
-                title: 'Container',
-                subtitle: 'Your submission',
-                backgroundColor: const Color(0xFFF8E7EF),
-                letterColor: const Color(0xFFA52C50),
-                textColor: const Color(0xFFA52C50),
-                icon: Icons.cancel,
-              ),
-
-              const SizedBox(height: 10),
-
-              answerBox(
-                letter: 'B',
-                title: 'Text',
-                subtitle: 'CORRECT ANSWER',
-                backgroundColor: const Color(0xFFE0F5ED),
-                letterColor: const Color(0xFF087B59),
-                textColor: const Color(0xFF087B59),
-                icon: Icons.check_circle,
-              ),
-
-              const SizedBox(height: 10),
-
-              answerBox(
-                letter: 'C',
-                title: 'Column',
-                subtitle: '',
-                backgroundColor: const Color(0xFFFCFAFF),
-                letterColor: const Color(0xFFEEEBF5),
-                textColor: Colors.grey,
-                icon: Icons.radio_button_unchecked,
-              ),
-
-              const SizedBox(height: 10),
-
-              answerBox(
-                letter: 'D',
-                title: 'Scaffold',
-                subtitle: '',
-                backgroundColor: const Color(0xFFFCFAFF),
-                letterColor: const Color(0xFFEEEBF5),
-                textColor: Colors.grey,
-                icon: Icons.radio_button_unchecked,
-              ),
-
-              const SizedBox(height: 24),
-
-              Container(
+              SizedBox(height: 20),
+              SizedBox(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: const Border(
-                    left: BorderSide(color: Color(0xFFA52C50), width: 4),
-                  ),
-                ),
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: Color(0xFFA52C50),
-                      size: 20,
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Concept Clarification',
-                            style: TextStyle(
-                              color: Color(0xFFA52C50),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          SizedBox(height: 6),
-                          Text(
-                            'The Text widget shows a string with a '
-                            'single style. Container handles layout, '
-                            'decoration, and sizing for a child.',
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 12,
-                              height: 1.5,
-                            ),
-                          ),
-                        ],
+                height: 280,
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: questions[1].options.length,
+                  itemBuilder: (context, index) {
+                    final question = questions[currentQuestion];
+                    final List<String> char = ['A', 'B', 'C', 'D'];
+                    final rightAnswer =
+                        question.options[index] ==
+                                widget.userAnswer[currentQuestion] &&
+                            widget.userAnswer[currentQuestion] ==
+                                question.answer ||
+                        question.answer == question.options[index];
+
+                    final wrongAnswer =
+                        question.options[index] ==
+                            widget.userAnswer[currentQuestion] &&
+                        widget.userAnswer[currentQuestion] != question.answer;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: answerBox(
+                        letter: char[index],
+                        title: question.options[index],
+                        subtitle: rightAnswer
+                            ? 'Correct Answer'
+                            : wrongAnswer
+                            ? 'Your submission'
+                            : '',
+                        backgroundColor: rightAnswer
+                            ? Color(0xFFE0F5ED)
+                            : wrongAnswer
+                            ? Color(0xFFF8E7EF)
+                            : Color(0xFFFCFAFF),
+                        letterColor: rightAnswer
+                            ? Color(0xFF087B59)
+                            : wrongAnswer
+                            ? Color(0xFFA52C50)
+                            : Color(0xFFEEEBF5),
+                        textColor: rightAnswer
+                            ? Color(0xFF087B59)
+                            : wrongAnswer
+                            ? Color(0xFFA52C50)
+                            : Colors.grey,
+                        icon: rightAnswer
+                            ? Icons.check_circle
+                            : wrongAnswer
+                            ? Icons.cancel
+                            : Icons.radio_button_unchecked,
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 14),
 
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Next question will be added later.'),
-                      ),
-                    );
+                    setState(() {
+                      if (widget.userAnswer.length <= currentQuestion) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Please select an answer before proceeding.",
+                            ),
+                          ),
+                        );
+                      } else if (currentQuestion < questions.length - 1) {
+                        currentQuestion++;
+                      } else if (currentQuestion == questions.length - 1) {
+                        Navigator.pop(context);
+                      }
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF6254E8),
@@ -288,10 +226,14 @@ class ReviewPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Next Question'),
+                      Text(
+                        currentQuestion == questions.length - 1
+                            ? "Finish Review"
+                            : "Next Question",
+                      ),
                       SizedBox(width: 8),
                       Icon(Icons.arrow_forward, size: 18),
                     ],

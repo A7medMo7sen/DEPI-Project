@@ -267,7 +267,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: fieldDecoration(
-                    hint: 'Enter your email',
+                    hint: 'Enter email=>"test@gmail.com"',
+                    //working email is test@gmail.com
+                    //password is 123456789
                     icon: Icons.email_outlined,
                   ),
                 ),
@@ -285,7 +287,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: passwordController,
                   obscureText: hidePassword,
                   decoration: fieldDecoration(
-                    hint: 'Enter your password',
+                    hint: 'Enter password=>"123456789"',
+                    //working email is test@gmail.com
+                    //password is 123456789
                     icon: Icons.lock_outline,
                     suffix: IconButton(
                       onPressed: () {

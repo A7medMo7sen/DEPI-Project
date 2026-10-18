@@ -3,8 +3,9 @@ import 'package:quiz_app/Pages/quiz_page.dart';
 import 'package:quiz_app/Pages/review_page.dart';
 
 class SummaryPage extends StatefulWidget {
-  const SummaryPage({super.key, required this.grade});
+  const SummaryPage({super.key, required this.grade,required this.userAnswer});
   final int grade;
+  final List<String> userAnswer;
 
   @override
   State<SummaryPage> createState() => _SummaryPageState();
@@ -209,7 +210,7 @@ class _SummaryPageState extends State<SummaryPage>
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ReviewPage(),
+                              builder: (context) => ReviewPage(userAnswer:widget.userAnswer),
                             ),
                           );
                         },

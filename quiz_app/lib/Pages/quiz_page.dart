@@ -12,6 +12,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   bool isSelected = false;
   List<String> userAnswer = [];
+  List<int> answerIndex = [];
   int grade = 0;
   List<String> selectedChar = ["A", "B", "C", "D"];
   int currentQuestion = 0;
@@ -22,7 +23,7 @@ class _QuizPageState extends State<QuizPage> {
         leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
         title: Row(
           children: [
-            Image.asset("assets/images/logo.jpg"),
+            Image.asset('assets/images/logo.jpg', width: 32, height: 32),
             Text(
               "Active Quiz",
               style: TextStyle(
@@ -304,7 +305,10 @@ class _QuizPageState extends State<QuizPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SummaryPage(grade: grade,),
+                            builder: (context) => SummaryPage(
+                              grade: grade,
+                              userAnswer: userAnswer,
+                            ),
                           ),
                         );
                       }

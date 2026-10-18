@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorSchemeSeed: const Color(0xFF6255E7),
       ),
       debugShowCheckedModeBanner: false,
-      home: QuizPage(),
+      home: SplashScreen(),
     );
   }
 }
