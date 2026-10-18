@@ -4,9 +4,15 @@ import 'package:quiz_app/Pages/quiz_page.dart';
 import 'package:quiz_app/Pages/review_page.dart';
 
 class SummaryPage extends StatefulWidget {
-  const SummaryPage({super.key, required this.grade, required this.userAnswer});
+  const SummaryPage({
+    super.key,
+    required this.grade,
+    required this.userAnswer,
+    required this.timer,
+  });
   final int grade;
   final List<String> userAnswer;
+  final Stopwatch timer;
 
   @override
   State<SummaryPage> createState() => _SummaryPageState();
@@ -15,6 +21,11 @@ class SummaryPage extends StatefulWidget {
 class _SummaryPageState extends State<SummaryPage>
     with TickerProviderStateMixin {
   late AnimationController controller;
+  String formatTime(int totalSeconds) {
+    final minutes = (totalSeconds ~/ 60).toString().padLeft(2, '0');
+    final seconds = (totalSeconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
 
   @override
   void initState() {
@@ -40,7 +51,10 @@ class _SummaryPageState extends State<SummaryPage>
         backgroundColor: const Color.fromRGBO(251, 248, 255, 0.85),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -268,8 +282,8 @@ class _SummaryPageState extends State<SummaryPage>
                         const SizedBox(width: 10),
                         summaryContainer(
                           icon: Icons.timer_outlined,
-                          number: '40S',
-                          name: 'True',
+                          number: formatTime(widget.timer.elapsed.inSeconds),
+                          name: 'time',
                           color: const Color.fromRGBO(130, 249, 190, 1),
                           iconColor: const Color.fromRGBO(0, 108, 71, 1),
                         ),
@@ -281,9 +295,12 @@ class _SummaryPageState extends State<SummaryPage>
               const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () {
+                  widget.timer.reset();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => QuizPage()),
+                    MaterialPageRoute(
+                      builder: (context) => QuizPage(timer: widget.timer),
+                    ),
                   );
                 },
                 label: const Text(
@@ -306,6 +323,8 @@ class _SummaryPageState extends State<SummaryPage>
               const SizedBox(height: 10),
               ElevatedButton.icon(
                 onPressed: () {
+                  widget.timer.stop();
+                  widget.timer.reset();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => HomeScreen()),

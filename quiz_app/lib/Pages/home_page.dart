@@ -1,13 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/Pages/quiz_page.dart';
+
 const Color primaryColor = Color(0xFF5B5CEB);
 const Color backgroundColor = Color(0xFFF8F7FF);
 const Color lightPurple = Color(0xFFF1EFFF);
 const Color darkColor = Color(0xFF202038);
 const Color greenColor = Color(0xFF00A878);
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+
+  static Widget _smallIcon(IconData icon, Color color) {
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.10),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Icon(icon, color: color, size: 25),
+    );
+  }
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final timer =Stopwatch() ;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,10 +102,7 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Icon(
-                      Icons.local_fire_department,
-                      color: greenColor,
-                    ),
+                    const Icon(Icons.local_fire_department, color: greenColor),
                     const SizedBox(width: 4),
                     const Text(
                       'Day 3',
@@ -132,7 +157,7 @@ class HomeScreen extends StatelessWidget {
                           Positioned(
                             top: 8,
                             right: 65,
-                            child: _smallIcon(
+                            child: HomeScreen._smallIcon(
                               Icons.bolt,
                               const Color(0xFFB52D50),
                             ),
@@ -140,7 +165,7 @@ class HomeScreen extends StatelessWidget {
                           Positioned(
                             bottom: 8,
                             left: 58,
-                            child: _smallIcon(
+                            child: HomeScreen._smallIcon(
                               Icons.settings,
                               const Color(0xFF16845D),
                             ),
@@ -294,12 +319,11 @@ class HomeScreen extends StatelessWidget {
                 height: 72,
                 child: ElevatedButton(
                   onPressed: () {
+                    timer.reset();
+                    timer.start();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                        const QuizPage(),
-                      ),
+                      MaterialPageRoute(builder: (context) =>  QuizPage(timer:timer)),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -330,11 +354,7 @@ class HomeScreen extends StatelessWidget {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.access_time,
-                    size: 18,
-                    color: Color(0xFF656579),
-                  ),
+                  Icon(Icons.access_time, size: 18, color: Color(0xFF656579)),
                   SizedBox(width: 8),
                   Flexible(
                     child: Text(
@@ -355,25 +375,8 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-  static Widget _smallIcon(IconData icon, Color color) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.10),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Icon(icon, color: color, size: 25),
-    );
-  }
 }
+
 class StatCard extends StatelessWidget {
   final IconData icon;
   final String number;
@@ -390,10 +393,7 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(minHeight: 162),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 4,
-        vertical: 14,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
       decoration: BoxDecoration(
         color: lightPurple,
         borderRadius: BorderRadius.circular(18),
@@ -412,9 +412,7 @@ class StatCard extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              color: isGreen
-                  ? const Color(0xFF087451)
-                  : primaryColor,
+              color: isGreen ? const Color(0xFF087451) : primaryColor,
               size: 25,
             ),
           ),
@@ -426,9 +424,7 @@ class StatCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w600,
-                color: isGreen
-                    ? const Color(0xFF087451)
-                    : darkColor,
+                color: isGreen ? const Color(0xFF087451) : darkColor,
               ),
             ),
           ),
@@ -436,10 +432,7 @@ class StatCard extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF555466),
-            ),
+            style: const TextStyle(fontSize: 13, color: Color(0xFF555466)),
           ),
         ],
       ),

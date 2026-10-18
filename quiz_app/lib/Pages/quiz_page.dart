@@ -3,8 +3,8 @@ import 'summary_page.dart';
 import 'package:quiz_app/resources/questions.dart';
 
 class QuizPage extends StatefulWidget {
-  const QuizPage({super.key});
-
+  const QuizPage({super.key, required this.timer});
+  final Stopwatch timer;
   @override
   State<QuizPage> createState() => _QuizPageState();
 }
@@ -20,7 +20,12 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         title: Row(
           children: [
             Image.asset('assets/images/logo.jpg', width: 32, height: 32),
@@ -180,7 +185,7 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    questions[currentQuestion].questiontext,
+                    questions[currentQuestion].questionText,
                     style: TextStyle(
                       color: Color(0xff171A30),
                       fontWeight: FontWeight.bold,
@@ -302,12 +307,14 @@ class _QuizPageState extends State<QuizPage> {
                       } else if (currentQuestion < questions.length - 1) {
                         currentQuestion++;
                       } else if (currentQuestion == questions.length - 1) {
+                        widget.timer.stop();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => SummaryPage(
                               grade: grade,
                               userAnswer: userAnswer,
+                              timer: widget.timer,
                             ),
                           ),
                         );

@@ -122,7 +122,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     const SizedBox(height: 14),
 
                     Text(
-                      questions[currentQuestion].questiontext,
+                      questions[currentQuestion].questionText,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
