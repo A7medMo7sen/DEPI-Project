@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/splash_login.dart';
+import 'package:quiz_app/Pages/quiz_page.dart';
+import 'package:quiz_app/Pages/splash_login.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'Pages/review_page.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform, // your current call
+    );
+  } on FirebaseException catch (e) {
+    if (e.code != 'duplicate-app') rethrow;
+  }
   runApp(const MyApp());
 }
 
@@ -23,7 +30,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF8F5FF),
         colorSchemeSeed: const Color(0xFF6255E7),
       ),
-      home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      home: QuizPage(),
     );
   }
 }

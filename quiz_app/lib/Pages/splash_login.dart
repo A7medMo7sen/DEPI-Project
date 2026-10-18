@@ -2,10 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-
-
-
+import 'package:quiz_app/Pages/quiz_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -163,6 +160,10 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
 
       showMessage('Login successful!');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const QuizPage()),
+      );
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
 
@@ -354,20 +355,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: isLoading
                         ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: Colors.white,
-                      ),
-                    )
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: Colors.white,
+                            ),
+                          )
                         : const Text(
-                      'Sign In',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                            'Sign In',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/rescources/questions.dart';
+import 'summary_page.dart';
+import 'package:quiz_app/resources/questions.dart';
 
 class QuizPage extends StatefulWidget {
-  QuizPage({super.key});
+  const QuizPage({super.key});
 
   @override
   State<QuizPage> createState() => _QuizPageState();
@@ -10,8 +11,9 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   bool isSelected = false;
-  List userAnswer = [];
-  List<String> selectedchar = ["A", "B", "C", "D"];
+  List<String> userAnswer = [];
+  int grade = 0;
+  List<String> selectedChar = ["A", "B", "C", "D"];
   int currentQuestion = 0;
   @override
   Widget build(BuildContext context) {
@@ -187,7 +189,7 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   SizedBox(height: 10),
                   Image.asset(
-                      questions[currentQuestion].image,
+                    questions[currentQuestion].image,
                     width: double.infinity,
                     height: 160,
                   ),
@@ -214,7 +216,7 @@ class _QuizPageState extends State<QuizPage> {
                             child: CircleAvatar(
                               backgroundColor: Color(0xffEDECFF),
                               child: Text(
-                                selectedchar[index],
+                                selectedChar[index],
                                 style: TextStyle(
                                   color: Color(0xff4143D5),
                                   fontWeight: FontWeight.w600,
@@ -243,18 +245,26 @@ class _QuizPageState extends State<QuizPage> {
                         child: IconButton(
                           icon:
                               userAnswer.length > currentQuestion &&
-                                  userAnswer[currentQuestion] == index
+                                  userAnswer[currentQuestion] ==
+                                      questions[currentQuestion].options[index]
                               ? Icon(Icons.check_circle_sharp)
                               : Icon(Icons.check_circle_outline_sharp),
                           color: Color(0xff4143D5),
                           onPressed: () {
                             setState(() {
                               if (userAnswer.length > currentQuestion) {
-                                userAnswer[currentQuestion] = index;
+                                userAnswer[currentQuestion] =
+                                    questions[currentQuestion].options[index];
                               } else {
-                                userAnswer.add(index);
+                                userAnswer.add(
+                                  questions[currentQuestion].options[index],
+                                );
                               }
                             });
+                            if (userAnswer[currentQuestion] ==
+                                questions[currentQuestion].answer) {
+                              grade++;
+                            }
                           },
                         ),
                       ),
@@ -280,15 +290,23 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   onPressed: () {
                     setState(() {
-                      if (userAnswer.length <=currentQuestion) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Please select an answer before proceeding."),
-                        ),
-                      );
-                      }
-                     else if (currentQuestion < questions.length - 1) {
+                      if (userAnswer.length <= currentQuestion) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Please select an answer before proceeding.",
+                            ),
+                          ),
+                        );
+                      } else if (currentQuestion < questions.length - 1) {
                         currentQuestion++;
+                      } else if (currentQuestion == questions.length - 1) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SummaryPage(grade: grade,),
+                          ),
+                        );
                       }
                     });
                   },

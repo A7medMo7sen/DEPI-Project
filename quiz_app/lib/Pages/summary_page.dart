@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/Pages/quiz_page.dart';
+import 'package:quiz_app/Pages/review_page.dart';
 
 class SummaryPage extends StatefulWidget {
-  const SummaryPage({super.key});
+  const SummaryPage({super.key, required this.grade});
+  final int grade;
 
   @override
   State<SummaryPage> createState() => _SummaryPageState();
@@ -9,7 +12,6 @@ class SummaryPage extends StatefulWidget {
 
 class _SummaryPageState extends State<SummaryPage>
     with TickerProviderStateMixin {
-  final grade = 4;
   late AnimationController controller;
 
   @override
@@ -18,6 +20,12 @@ class _SummaryPageState extends State<SummaryPage>
       vsync: this,
       duration: Duration(seconds: 2),
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        controller.forward();
+      }
+    });
     super.initState();
   }
 
@@ -28,7 +36,12 @@ class _SummaryPageState extends State<SummaryPage>
       appBar: AppBar(
         elevation: 1,
         backgroundColor: const Color.fromRGBO(251, 248, 255, 0.85),
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
         title: Row(
           children: [
             Image.asset('assets/images/logo.jpg', width: 32, height: 32),
@@ -110,11 +123,17 @@ class _SummaryPageState extends State<SummaryPage>
                     ),
                     const Text(
                       'Layout Quiz Completed!',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight(700)),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight(700),
+                      ),
                     ),
                     const Text(
                       "Great job! Here's how you did.",
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight(400)),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight(400),
+                      ),
                     ),
                     const SizedBox(height: 40),
                     Stack(
@@ -133,8 +152,11 @@ class _SummaryPageState extends State<SummaryPage>
                           width: 100,
                           height: 100,
                           child: TweenAnimationBuilder(
-                            tween: Tween<double>(begin: 0, end: grade / 5),
-                            duration: Duration(milliseconds: 500),
+                            tween: Tween<double>(
+                              begin: 0,
+                              end: widget.grade / 5,
+                            ),
+                            duration: Duration(seconds: 1),
                             builder: (context, value, child) {
                               return CircularProgressIndicator(
                                 value: value,
@@ -148,7 +170,7 @@ class _SummaryPageState extends State<SummaryPage>
                         Positioned(
                           top: 20,
                           child: Text(
-                            '$grade/5',
+                            '${widget.grade}/5',
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight(1000),
@@ -161,9 +183,9 @@ class _SummaryPageState extends State<SummaryPage>
                           child: TweenAnimationBuilder(
                             tween: Tween<double>(
                               begin: 0,
-                              end: (grade / 5) * 100,
+                              end: (widget.grade / 5) * 100,
                             ),
-                            duration: Duration(milliseconds: 500),
+                            duration: Duration(seconds: 1),
                             builder: (context, value, child) {
                               return Text(
                                 '${value.toInt()} % score',
@@ -179,14 +201,26 @@ class _SummaryPageState extends State<SummaryPage>
                       ],
                     ),
                     const SizedBox(height: 20),
-          
+
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReviewPage(),
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(double.infinity, 50),
-                          backgroundColor: const Color.fromRGBO(128, 246, 187, 1),
+                          backgroundColor: const Color.fromRGBO(
+                            128,
+                            246,
+                            187,
+                            1,
+                          ),
                         ),
                         child: const Text(
                           'Review',
@@ -215,7 +249,7 @@ class _SummaryPageState extends State<SummaryPage>
                       children: [
                         summaryContainer(
                           icon: Icons.check,
-                          number: grade.toString(),
+                          number: widget.grade.toString(),
                           name: 'True',
                           color: const Color.fromRGBO(130, 249, 190, 1),
                           iconColor: const Color.fromRGBO(0, 108, 71, 1),
@@ -223,7 +257,7 @@ class _SummaryPageState extends State<SummaryPage>
                         const SizedBox(width: 10),
                         summaryContainer(
                           icon: Icons.close,
-                          number: (5 - grade).toString(),
+                          number: (5 - widget.grade).toString(),
                           name: 'Wrong',
                           color: const Color.fromRGBO(255, 218, 214, 1),
                           iconColor: const Color.fromRGBO(186, 26, 26, 1),
@@ -243,7 +277,12 @@ class _SummaryPageState extends State<SummaryPage>
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => QuizPage()),
+                  );
+                },
                 label: const Text(
                   'Try Again',
                   style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
@@ -256,12 +295,12 @@ class _SummaryPageState extends State<SummaryPage>
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor: const Color.fromRGBO(65, 67, 213, 1),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)
-                  )
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
-          
-              const SizedBox(height: 10,),
+
+              const SizedBox(height: 10),
               ElevatedButton.icon(
                 onPressed: () {},
                 label: const Text(
@@ -273,11 +312,11 @@ class _SummaryPageState extends State<SummaryPage>
                   color: Color.fromRGBO(0, 0, 0, 1),
                 ),
                 style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50),
-                    backgroundColor: const Color.fromRGBO(230, 230, 255, 1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)
-                    )
+                  minimumSize: Size(double.infinity, 50),
+                  backgroundColor: const Color.fromRGBO(230, 230, 255, 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ],
