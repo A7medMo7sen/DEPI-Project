@@ -296,6 +296,7 @@ class _SummaryPageState extends State<SummaryPage>
               ElevatedButton.icon(
                 onPressed: () {
                   widget.timer.reset();
+                  widget.timer.start();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

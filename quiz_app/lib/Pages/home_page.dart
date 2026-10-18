@@ -33,8 +33,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final timer =Stopwatch() ;
-
+  final timer = Stopwatch();
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +322,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     timer.start();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  QuizPage(timer:timer)),
+                      MaterialPageRoute(
+                        builder: (context) => QuizPage(timer: timer),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
