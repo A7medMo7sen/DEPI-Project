@@ -3,7 +3,7 @@ import 'package:quiz_app/Pages/home_page.dart';
 import 'package:quiz_app/Pages/quiz_page.dart';
 import 'package:quiz_app/Pages/review_page.dart';
 
-class SummaryPage extends StatefulWidget {
+class SummaryPage extends StatelessWidget {
   const SummaryPage({
     super.key,
     required this.grade,
@@ -14,32 +14,10 @@ class SummaryPage extends StatefulWidget {
   final List<String> userAnswer;
   final Stopwatch timer;
 
-  @override
-  State<SummaryPage> createState() => _SummaryPageState();
-}
-
-class _SummaryPageState extends State<SummaryPage>
-    with TickerProviderStateMixin {
-  late AnimationController controller;
   String formatTime(int totalSeconds) {
     final minutes = (totalSeconds ~/ 60).toString().padLeft(2, '0');
     final seconds = (totalSeconds % 60).toString().padLeft(2, '0');
     return '$minutes:$seconds';
-  }
-
-  @override
-  void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 2),
-    );
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        controller.forward();
-      }
-    });
-    super.initState();
   }
 
   @override
@@ -51,6 +29,8 @@ class _SummaryPageState extends State<SummaryPage>
         backgroundColor: const Color.fromRGBO(251, 248, 255, 0.85),
         leading: IconButton(
           onPressed: () {
+            timer.stop();
+            timer.reset();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -170,7 +150,7 @@ class _SummaryPageState extends State<SummaryPage>
                           child: TweenAnimationBuilder(
                             tween: Tween<double>(
                               begin: 0,
-                              end: widget.grade / 5,
+                              end: grade / 5,
                             ),
                             duration: Duration(seconds: 1),
                             builder: (context, value, child) {
@@ -186,7 +166,7 @@ class _SummaryPageState extends State<SummaryPage>
                         Positioned(
                           top: 20,
                           child: Text(
-                            '${widget.grade}/5',
+                            '$grade/5',
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight(1000),
@@ -199,7 +179,7 @@ class _SummaryPageState extends State<SummaryPage>
                           child: TweenAnimationBuilder(
                             tween: Tween<double>(
                               begin: 0,
-                              end: (widget.grade / 5) * 100,
+                              end: (grade / 5) * 100,
                             ),
                             duration: Duration(seconds: 1),
                             builder: (context, value, child) {
@@ -226,7 +206,7 @@ class _SummaryPageState extends State<SummaryPage>
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  ReviewPage(userAnswer: widget.userAnswer),
+                                  ReviewPage(userAnswer: userAnswer),
                             ),
                           );
                         },
@@ -259,48 +239,46 @@ class _SummaryPageState extends State<SummaryPage>
                   color: const Color.fromRGBO(255, 255, 255, 1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        summaryContainer(
-                          icon: Icons.check,
-                          number: widget.grade.toString(),
-                          name: 'True',
-                          color: const Color.fromRGBO(130, 249, 190, 1),
-                          iconColor: const Color.fromRGBO(0, 108, 71, 1),
-                        ),
-                        const SizedBox(width: 10),
-                        summaryContainer(
-                          icon: Icons.close,
-                          number: (5 - widget.grade).toString(),
-                          name: 'Wrong',
-                          color: const Color.fromRGBO(255, 218, 214, 1),
-                          iconColor: const Color.fromRGBO(186, 26, 26, 1),
-                        ),
-                        const SizedBox(width: 10),
-                        summaryContainer(
-                          icon: Icons.timer_outlined,
-                          number: formatTime(widget.timer.elapsed.inSeconds),
-                          name: 'time',
-                          color: const Color.fromRGBO(130, 249, 190, 1),
-                          iconColor: const Color.fromRGBO(0, 108, 71, 1),
-                        ),
-                      ],
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      summaryContainer(
+                        icon: Icons.check,
+                        number: grade.toString(),
+                        name: 'True',
+                        color: const Color.fromRGBO(130, 249, 190, 1),
+                        iconColor: const Color.fromRGBO(0, 108, 71, 1),
+                      ),
+                      const SizedBox(width: 10),
+                      summaryContainer(
+                        icon: Icons.close,
+                        number: (5 - grade).toString(),
+                        name: 'Wrong',
+                        color: const Color.fromRGBO(255, 218, 214, 1),
+                        iconColor: const Color.fromRGBO(186, 26, 26, 1),
+                      ),
+                      const SizedBox(width: 10),
+                      summaryContainer(
+                        icon: Icons.timer_outlined,
+                        number: formatTime(timer.elapsed.inSeconds),
+                        name: 'time',
+                        color: const Color.fromRGBO(130, 249, 190, 1),
+                        iconColor: const Color.fromRGBO(0, 108, 71, 1),
+                      ),
+                    ],
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () {
-                  widget.timer.reset();
-                  widget.timer.start();
+                  timer.reset();
+                  timer.start();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => QuizPage(timer: widget.timer),
+                      builder: (context) => QuizPage(timer: timer),
                     ),
                   );
                 },
@@ -324,8 +302,8 @@ class _SummaryPageState extends State<SummaryPage>
               const SizedBox(height: 10),
               ElevatedButton.icon(
                 onPressed: () {
-                  widget.timer.stop();
-                  widget.timer.reset();
+                  timer.stop();
+                  timer.reset();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -377,7 +355,7 @@ Widget summaryContainer({
             child: Icon(icon, color: iconColor, size: 18),
           ),
           Text(
-            number.toString(),
+            number,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight(600)),
           ),
           Text(

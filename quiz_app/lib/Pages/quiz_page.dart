@@ -16,6 +16,17 @@ class _QuizPageState extends State<QuizPage> {
   int grade = 0;
   List<String> selectedChar = ["A", "B", "C", "D"];
   int currentQuestion = 0;
+
+  int calculateGrade() {
+    int grade = 0;
+    for (int i = 0; i < userAnswer.length; i++) {
+      if (userAnswer[i] == questions[i].answer) {
+        grade++;
+      }
+    }
+    return grade;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -267,10 +278,6 @@ class _QuizPageState extends State<QuizPage> {
                                 );
                               }
                             });
-                            if (userAnswer[currentQuestion] ==
-                                questions[currentQuestion].answer) {
-                              grade++;
-                            }
                           },
                         ),
                       ),
@@ -312,7 +319,7 @@ class _QuizPageState extends State<QuizPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => SummaryPage(
-                              grade: grade,
+                              grade: calculateGrade(),
                               userAnswer: userAnswer,
                               timer: widget.timer,
                             ),
